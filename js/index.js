@@ -11,4 +11,23 @@ document.addEventListener("DOMContentLoaded", function(){
         localStorage.setItem("catID", 103);
         window.location = "products.html"
     });
+
+
+
+    if (!localStorage.getItem("username")){
+        alert("Para visitar nuestra página primero debe iniciar sesión.")
+        window.location = "login.html"
+    } 
+    
+
+    document.getElementById("logout").addEventListener("click", function() {
+    localStorage.removeItem("username");
+    alert("Su sesión ha sido cerrada con éxito.")
+    window.location.href = "login.html";
+    });
+    
+
+    if(localStorage.getItem("username")){
+        document.getElementById("usuario").textContent = localStorage.getItem("username");
+    }
 });

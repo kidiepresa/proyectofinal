@@ -193,18 +193,14 @@ a.custom-card:hover {
   color: #80888f;
 }
 
-#inicio{
-  display: flex;
-  flex-direction: column;
-  width: 300px;    
-  margin: 100px auto; 
-}
-
-#inicio p{
-  font-size: 20px;
-  margin-right: 1000px;
-}
-
 input{
   width: 300px;
 }
+ 
+ #logout{
+  margin-left: 50px;
+ }
+
+#usuario{
+  color: white;
+ } 

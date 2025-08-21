@@ -21,12 +21,12 @@
 
     <h1>LOGIN</h1>
 
-        <div class="login">   
+        <div class="login" id="form">   
                 <form action="/login" method="POST">
                     <label for="username"> USUARIO:</label><br>
-                    <input type="text" id="username" name="username"><br>
+                    <input type="text" id="username" name="username" required><br>
                     <label for="password"> CONTRASEÑA:</label><br>
-                    <input type="password" id="password" name="password"><br>
+                    <input type="password" id="password" name="password" required minlength="8"><br>
                     <input type="submit" value="Ingresar">
                 </form>
         </div>
