@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function(){
+
 document.getElementById("form").addEventListener("submit", function(event){
         event.preventDefault()
         let username = document.getElementById("username").value;
@@ -5,4 +7,4 @@ document.getElementById("form").addEventListener("submit", function(event){
         window.location.href = "index.html";
 });
 
-
+})
