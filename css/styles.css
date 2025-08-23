@@ -202,9 +202,10 @@ a.custom-card:hover {
   color: orange;
 }
 
-label{
+#form label{
   color: white;
 }
+
 #logout{
   margin-left: 50px;
  }
