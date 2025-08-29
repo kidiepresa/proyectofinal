@@ -21,18 +21,22 @@
 </head>
 
 <body>
-  <div class="signin">
-    <h1><span id="e">e•</span>mercado</h1>
-        <p><strong>Inicia sesión para poder continuar</strong></p>
-        <div id="form">   
-                <form action="/login" method="POST" id="formulario">
-                    <label for="username"> Ingrese su nombre de usuario</label><br>
-                    <input type="text" id="username" name="username" required><br>
-                    <label for="password"> Ingrese su contraseña</label><br>
-                    <input type="password" id="password" name="password" required minlength="8"><br>
-                    <input id="enviar" type="submit" value="Ingresar">
-                </form>
-        </div>
+  <div class="container signi">
+    <div class="row">
+      <div class="col-12 col-md-12 col-xl-12">
+      <h1><span id="e">e•</span>mercado</h1>
+          <p><strong>Inicia sesión para poder continuar</strong></p>
+          <div id="form">
+                  <form action="/login" method="POST" id="formulario">
+                      <label for="username"> Ingrese su nombre de usuario</label><br>
+                      <input type="text" id="username" name="username" required><br>
+                      <label for="password"> Ingrese su contraseña</label><br>
+                      <input type="password" id="password" name="password" required minlength="8"><br>
+                      <input id="enviar" type="submit" value="Ingresar">
+                  </form>
+          </div>
+      </div>
+    </div>
   </div>
   <footer class="text-muted">
     <div class="container">
@@ -43,6 +47,7 @@
     </div>
   </footer>
   <script src="js/login.js"></script>
+
 </body>
 
 </html>

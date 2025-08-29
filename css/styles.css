@@ -166,7 +166,7 @@ footer p {
   margin:auto;
   margin-top: 200px;
   margin-bottom: 285px;
-}
+} 
 
 
 #spinner-wrapper {
@@ -204,6 +204,10 @@ a.custom-card:hover {
 
 #form label{
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #logout{
@@ -222,12 +226,12 @@ a.custom-card:hover {
   border-radius: 8px;
  }
 
- #formulario{
+/*  #formulario{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
- }
+ } */
  
  #enviar {
   max-width: 100px;
