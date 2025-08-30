@@ -214,10 +214,6 @@ a.custom-card:hover {
   margin-left: 50px;
  }
 
-#usuario{
-  color: white;
- } 
-
 
 #form input{
   opacity: 0.3;
@@ -225,13 +221,6 @@ a.custom-card:hover {
   border: solid 1px black;
   border-radius: 8px;
  }
-
-/*  #formulario{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
- } */
  
  #enviar {
   max-width: 100px;
