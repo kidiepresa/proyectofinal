@@ -12,13 +12,7 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location = "products.html"
     });
 
-
-
-    if (!localStorage.getItem("username")){
-        alert("Para visitar nuestra página primero debe iniciar sesión.")
-        window.location = "login.html"
-    } 
-    
+  
 
     document.getElementById("logout").addEventListener("click", function() {
     localStorage.removeItem("username");
