@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location = "products.html"
     });
 
-  
+   
 
     document.getElementById("logout").addEventListener("click", function() {
     localStorage.removeItem("username");
