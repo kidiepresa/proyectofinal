@@ -33,7 +33,7 @@ function filterProducts(){
 
     let filteredProducts = currentProductsArray.filter(product => {
       const byPrice = (!minPrice || product.cost >= minPrice) &&
-               (!maxPrice || product.cost <= maxPrice);  
+                (!maxPrice || product.cost <= maxPrice);  
       
       const bySearch = !search ||                           //  
       product.name.toLowerCase().includes(search) ||        //
@@ -79,8 +79,10 @@ function showProducts(array, catName){
         auto.style.padding= "10px";
         auto.style.display = "flex";
         auto.style.gap = "20px";
-        auto.onclick = function() {
-          window.location.href = "product-info.html";
+        auto.onclick = function(){
+          
+          localStorage.setItem("prodID", producto.id);
+          window.location = "product-info.html";
         };
       
 
