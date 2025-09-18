@@ -9,6 +9,7 @@ let currentCatName;
 
 let minPrice = undefined;
 let maxPrice = undefined;
+let search = undefined;
 
 //ORDENA LOS PRODUCTOS
 function sortProducts(criteria, array){ 
@@ -22,29 +23,38 @@ function sortProducts(criteria, array){
     return array;
 }
 
-//APLICA EL FILTRO DE PRECIO, SI NO HAY NO HACE NADA
+
+//APLICA EL FILTRO DE PRECIO Y BÚSQUEDA, SI NO HAY NO HACE NADA
 function filterProducts(){
     minPrice = +document.getElementById("rangeFilterPriceMin").value;
     maxPrice = +document.getElementById("rangeFilterPriceMax").value;
+    search = document.getElementById("searchinput").value.toLowerCase();
 
-    let filteredProducts = currentProductsArray.filter(producto => {
-        return (!minPrice || producto.cost >= minPrice) &&
-               (!maxPrice || producto.cost <= maxPrice);
+
+    let filteredProducts = currentProductsArray.filter(product => {
+      const byPrice = (!minPrice || product.cost >= minPrice) &&
+               (!maxPrice || product.cost <= maxPrice);  
+      
+      const bySearch = !search ||                           //  
+      product.name.toLowerCase().includes(search) ||        //
+      product.description.toLowerCase().includes(search);   //  ESTO FUE 
+                                                            //  LO Q AGREGUE PARA Q HAGA 
+      return byPrice && bySearch;                           //  LA BUSQUEDA CHIQUILINES
     })
     
     let criteria;
     if(document.getElementById("sortAsc").checked){
-        criteria = "PRICE_ASC";
+        criteria = ORDER_ASC_BY_PRICE;
     } else if(document.getElementById("sortDesc").checked){
-        criteria = "PRICE_DESC";
-    } else {
-        criteria = "SOLD_DESC";
+        criteria = ORDER_DESC_BY_PRICE;
+    } else if(document.getElementById("sortByRel").checked){
+        criteria = ORDER_BY_SOLD;
     }
 
     let sorted = sortProducts(criteria, filteredProducts);
     showProducts(sorted, currentCatName);
 
-  }
+}
 
 //RECIBE LOS PRODUCTOS FILTRADOS Y/O ORDENADOS Y LOS ACTUALIZA EN PANTALLA
 function showProducts(array, catName){
@@ -64,11 +74,15 @@ function showProducts(array, catName){
 
     array.forEach(producto => {
         let auto = document.createElement("div")
-        auto.classList.add("row")
+        auto.classList.add("row", "list-group-item", "list-group-item-action", "articles", "cursor-active")
         auto.style.border = "1px solid lightgray";
         auto.style.padding= "10px";
         auto.style.display = "flex";
         auto.style.gap = "20px";
+        auto.onclick = function() {
+          window.location.href = "product-info.html";
+        };
+      
 
         let cantidad_vendidos 
         if (producto.soldCount == 0) {
@@ -77,7 +91,7 @@ function showProducts(array, catName){
           cantidad_vendidos = "Se ha venidido 1 unidad";
         }else cantidad_vendidos = `Se han vendido ${producto.soldCount} unidades.`;
 
-
+        
         auto.innerHTML = `
         <div class = "col-5">
         <img  src="${producto.image}"  class="img-thumbnail";  style=border: 1px solid lightgray; border-radius: 15px; padding: 5px;">
@@ -89,7 +103,6 @@ function showProducts(array, catName){
                 <p>${producto.currency} ${producto.cost}</p>
                 <i class="vendidos">${cantidad_vendidos}</i>
           </div>`
-        
         productos.appendChild(auto);        
     });
     
@@ -134,4 +147,7 @@ initProducts();
         maxPrice = undefined;
         filterProducts();
     })
+
+    document.getElementById("searchinput").addEventListener("input", filterProducts);
+
   });
