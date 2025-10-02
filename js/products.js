@@ -123,7 +123,8 @@ const url = `https://japceibal.github.io/emercado-api/cats_products/${catID}.jso
 
     currentProductsArray = data.products;
     currentCatName = data.catName;
-    showProducts(currentProductsArray, data.catName)
+    showProducts(currentProductsArray, data.catName);
+    localStorage.setItem("relatedProducts", JSON.stringify(data.products));
     
   }).catch(error => console.error('Error al cargar los productos:', error));
 }
