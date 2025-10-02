@@ -35,11 +35,11 @@ function filterProducts(){
       const byPrice = (!minPrice || product.cost >= minPrice) &&
                 (!maxPrice || product.cost <= maxPrice);  
       
-      const bySearch = !search ||                           //  
-      product.name.toLowerCase().includes(search) ||        //
-      product.description.toLowerCase().includes(search);   //  ESTO FUE 
-                                                            //  LO Q AGREGUE PARA Q HAGA 
-      return byPrice && bySearch;                           //  LA BUSQUEDA CHIQUILINES
+      const bySearch = !search ||                            
+      product.name.toLowerCase().includes(search) ||        
+      product.description.toLowerCase().includes(search);   
+                                                              
+      return byPrice && bySearch;                            
     })
     
     let criteria;
