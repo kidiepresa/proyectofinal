@@ -2,29 +2,54 @@ function initProduct(){
 
     const productID = localStorage.getItem("prodID");
     const catID = localStorage.getItem("catID");
-    fetch(`https://japceibal.github.io/emercado-api/cats_products/${catID}.json`)
+    fetch(`https://japceibal.github.io/emercado-api/products/${productID}.json`)
     .then(response => response.json())
     .then(data => {
-        const producto = data.products.find(p => p.id == productID);
-        showProduct(producto);
+        showProduct(data);
         }).catch(error => console.error('Error al cargar el producto', error));
 
     }
     
 
 function showProduct(producto){
-    document.getElementById("imagen-producto").innerHTML = `
-    <img src="${producto.image}" style="width:100%; border: 1px solid lightgray; border-radius: 5px; padding: 5px;">
-    `;
+    let cantidad_vendidos 
+        if (producto.soldCount == 0) {
+          cantidad_vendidos = "Ninguna unidad vendida. Sé el primero en probar este producto!";
+        }else if (producto.soldCount == 1){
+          cantidad_vendidos = "Se ha venidido 1 unidad";
+        }else cantidad_vendidos = `Se han vendido ${producto.soldCount} unidades.`;
+
+
+     let imagenPrincipal = `
+    <div id="galeria">
+      <img id="main-image" src="${producto.images[0]}" 
+           style="width:100%; border: 1px solid lightgray; border-radius: 5px; padding: 5px;">
+      <div id="thumbnails" style="display:flex; gap:5px; margin-top:10px;">
+        ${producto.images
+          .map(
+            (img, i) => `
+          <img src="${img}" 
+               onclick="document.getElementById('main-image').src='${img}'" 
+               style="width:80px; height:80px; object-fit:cover; cursor:pointer; border:1px solid gray; border-radius:5px;">
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  document.getElementById("imagen-producto").innerHTML = imagenPrincipal;
     document.getElementById("info-producto").innerHTML = `
     <h1>${producto.name}</h1>
     <p>${producto.description}</p>
     <p> ${producto.currency} ${producto.cost}</p>
-    <p>Se han vendido: ${producto.soldCount} unidades </p>
+    <p> ${cantidad_vendidos}</p>
     <p>Añadir al carrito</p>
     `;
     
 }
+
+
 
 function showRelatedProducts(){
     const relatedProducts = JSON.parse(localStorage.getItem("relatedProducts"));
@@ -59,7 +84,7 @@ function showRelatedProducts(){
                                 <img src="${producto.image}" class="card-img-top" alt="${producto.name}">
                                 <div class="card-body">
                                     <h5 class="card-title">${producto.name}</h5>
-                                    <a href="product-info.html" class="btn btn-primary">Ver producto</a>
+                                    <button onclick="producto()" class="btn btn-primary">Ver producto</button>
                                 </div>
                             </div>
                         `;
