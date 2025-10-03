@@ -1,6 +1,27 @@
 let selectedRating = 0; 
 let totalRatings = 0;
+let commentsAPI = [];
 
+function loadComents() {
+    const prodID = localStorage.getItem('prodID');
+
+
+    let savedComments = JSON.parse(localStorage.getItem(`comments-${prodID}`));
+
+    if (savedComments) {
+        showComments(savedComments);
+    } else {
+        // Si no hay, cargar los de la API y guardarlos
+        fetch(`https://japceibal.github.io/emercado-api/products_comments/${prodID}.json`)
+            .then(response => response.json())
+            .then(data => {
+                commentsAPI = data;
+                localStorage.setItem(`comments-${prodID}`, JSON.stringify(commentsAPI));
+                showComments(commentsAPI);
+            })
+            .catch(error => console.error('Error al cargar comentarios:', error));
+    }
+}
 
 
 function initProduct(){
@@ -9,9 +30,10 @@ function initProduct(){
     fetch(`https://japceibal.github.io/emercado-api/products/${productID}.json`)
     .then(response => response.json())
     .then(data => {
+        localStorage.setItem("relatedProducts", JSON.stringify(data.relatedProducts));
         showProduct(data);
         }).catch(error => console.error('Error al cargar el producto', error));
-    }
+}
     
 
 function showProduct(producto){
@@ -60,7 +82,6 @@ function showRelatedProducts(){
     const relatedProducts = JSON.parse(localStorage.getItem("relatedProducts"));
     const relatedContainer = document.getElementById("productos-relacionados");
     relatedContainer.innerHTML = "";
-    console.log(relatedProducts);
     const slides = Math.ceil((relatedProducts.length - 1) / 3);
     let contador = relatedProducts.length - 1;
     for (let i = 0; i < slides; i++) {
@@ -74,8 +95,6 @@ function showRelatedProducts(){
         for (let j = 0; j < 3; j++) {
             if (contador >= 0) {
                 let producto = relatedProducts[contador];
-                console.log(relatedProducts[contador]);
-                console.log(i);
                 if (producto.id == localStorage.getItem("prodID")) {
                     producto = relatedProducts[contador - 1];
                     contador--;
@@ -102,7 +121,7 @@ function showRelatedProducts(){
         }
         relatedContainer.appendChild(div);
     }
-}
+} 
 
 
 function rate(stars) {
@@ -146,6 +165,18 @@ function showComments(comments) {
     container.innerHTML = html;
 }
 
+function formatDate(date) {
+    const d = date.getDate().toString().padStart(2, '0');
+    const m = (date.getMonth() + 1).toString().padStart(2, '0'); // Enero = 0
+    const y = date.getFullYear();
+
+    const h = date.getHours().toString().padStart(2, '0');
+    const min = date.getMinutes().toString().padStart(2, '0');
+    const s = date.getSeconds().toString().padStart(2, '0');
+
+    return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
+
 function addComment() {
     const prodID = localStorage.getItem('prodID');
     const text = document.getElementById('commentText').value;
@@ -161,16 +192,9 @@ function addComment() {
         score: selectedRating,
         description: text,
         user: user,
-        dateTime: new Date().toLocaleString('es-UY', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-})
+        dateTime: formatDate(new Date())
     };
-    let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`)) || [];
+    let comments = (JSON.parse(localStorage.getItem(`comments-${prodID}`)) || []);
     comments.unshift(newComment);
 
 
@@ -193,11 +217,17 @@ document.addEventListener("DOMContentLoaded", function(e){
 
     initProduct();
     showRelatedProducts()
-
+    loadComents();
     const prodID = localStorage.getItem('prodID');
     const savedComments = localStorage.getItem(`comments-${prodID}`);
-    if (savedComments) showComments(JSON.parse(savedComments))
-        else document.getElementById('commentsList').innerHTML = '<p>No hay comentarios aún. Sé el primero en comentar!</p>';
+    const savedQualification = localStorage.getItem(`qualification-${prodID}`);
+    if (savedComments) {
+        showComments(JSON.parse(savedComments));
+    }
+    
+   else if (savedQualification == null) {document.getElementById(`commentsList`).innerHTML += `<p>No hay comentarios aún. Sé el primero en comentar!</p>`;}
+    
+    
     
 
 })
