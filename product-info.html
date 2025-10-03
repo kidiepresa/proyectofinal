@@ -45,35 +45,33 @@
     <div class="container">
       <div class="row border rounded border-2">
           <div class="d-flex justify-content-between align-items-center mb-3">
-          <button class="btn btn-sm btn-light text-dark" onclick="window.location.href='products.html'">← Volver al listado</button>
-          <button class="btn btn-light">Añadir favoritos ❤</button>
+          <button class="btn btn-sm btn-light text-dark m-3 " onclick="window.location.href='products.html'">← Volver al listado</button>
+          <button class="btn btn-light m-3">Añadir favoritos ❤</button>
         </div>
-        <div class="col-6 p-5" id="imagen-producto">
-          
-        </div>
-        <div class="col-6" id="info-producto">
-          
-        </div>
-
+        <div class="col-6 p-5" id="imagen-producto"></div>
+        <div class="col-6" id="info-producto"></div>
 
         <div id="calificaciones">
-    <h3>Añade tu comentario:</h3>
+          <h3>Añade tu comentario:</h3>
 
-    <div class="mb-3">
-        <label>Tu calificación:</label>
-        <div id="stars">
-          <i class="fas fa-star star" onclick="rate(1)"></i>
-          <i class="fas fa-star star" onclick="rate(2)"></i>
-          <i class="fas fa-star star" onclick="rate(3)"></i>
-          <i class="fas fa-star star" onclick="rate(4)"></i>
-          <i class="fas fa-star star" onclick="rate(5)"></i>
-        </div>
-        <small>Selecciona tu calificación</small>
-    </div>
+          
+          <div class="mb-3">
+            <label>Tu calificación:</label>
+              <div id="stars">
+                  <i class="fas fa-star star" onclick="rate(1)"></i>
+                  <i class="fas fa-star star" onclick="rate(2)"></i>
+                  <i class="fas fa-star star" onclick="rate(3)"></i>
+                  <i class="fas fa-star star" onclick="rate(4)"></i>
+                  <i class="fas fa-star star" onclick="rate(5)"></i>
+              </div>
+              <small>Selecciona tu calificación</small>
+          </div>
 
-    <div id="form-calificacion">
-        <textarea id="commentText" placeholder="Escribe tu comentario..." rows="3" style="width:100%; margin-top:5px;"></textarea>
-        <button onclick="addComment()">Enviar Comentario</button>
+    <div class="d-flex flex-column gap-3" id="form-calificacion">
+        <textarea id="commentText" placeholder="Escribe tu comentario..." rows="3" style="width:60%; margin-top:5px;"></textarea>
+        <button class="col-2" onclick="addComment()">Enviar Comentario</button>
+        <br><br><br>
+        <h3>Opiniones destacadas:</h3>
     </div>
 
     <div id="lista-calificaciones" style="margin-top:20px;"></div>

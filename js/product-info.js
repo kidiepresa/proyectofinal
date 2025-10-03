@@ -1,5 +1,9 @@
-function initProduct(){
+let selectedRating = 0; 
+let totalRatings = 0;
 
+
+
+function initProduct(){
     const productID = localStorage.getItem("prodID");
     const catID = localStorage.getItem("catID");
     fetch(`https://japceibal.github.io/emercado-api/products/${productID}.json`)
@@ -7,7 +11,6 @@ function initProduct(){
     .then(data => {
         showProduct(data);
         }).catch(error => console.error('Error al cargar el producto', error));
-
     }
     
 
@@ -45,12 +48,12 @@ function showProduct(producto){
     <p>${producto.description}</p>
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
-    <p>Calificación promedio:${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
+    <p>Calificación promedio: ${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
     <button class="btn btn-primary" onclick="location.href='cart.html'">Comprar</button>
+    <button class="btn btn-primary" onclick="location.href='cart.html'">Añadir al carrito</button>
     `;
     
 }
-
 
 
 function showRelatedProducts(){
@@ -101,6 +104,7 @@ function showRelatedProducts(){
     }
 }
 
+
 function rate(stars) {
     selectedRating = stars;
     const allStars = document.querySelectorAll('#stars .star');
@@ -112,7 +116,6 @@ function rate(stars) {
         }
     });
 }
-
 
 
 function showComments(comments) {
@@ -143,9 +146,6 @@ function showComments(comments) {
     container.innerHTML = html;
 }
 
-let selectedRating = 0;  
-let totalRatings = 0;
-
 function addComment() {
     const prodID = localStorage.getItem('prodID');
     const text = document.getElementById('commentText').value;
@@ -170,20 +170,16 @@ function addComment() {
             second: '2-digit'
 })
     };
-    // Cargar comentarios existentes primero
-let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`)) || [];
+    let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`));
+    comments.unshift(newComment);
 
-// Agregar el nuevo comentario al inicio
-comments.unshift(newComment);
 
-// Calcular promedio actualizado
-let promedio = 0;
-if (comments.length > 0) {
-    const suma = comments.reduce((acc, c) => acc + c.score, 0);
-    promedio = (suma / comments.length).toFixed(1); // 1 decimal
+    let promedio = 0;
+    if (comments.length > 0) {
+        const suma = comments.reduce((acc, c) => acc + c.score, 0);
+        promedio = (suma / comments.length).toFixed(1);
 }
 
-// Guardar todo en localStorage
     localStorage.setItem(`comments-${prodID}`, JSON.stringify(comments));
     localStorage.setItem(`qualification-${prodID}`, promedio);
     showComments(comments);
@@ -194,13 +190,15 @@ if (comments.length > 0) {
 
 
 document.addEventListener("DOMContentLoaded", function(e){
-const prodID = localStorage.getItem('prodID');
-    const savedComments = localStorage.getItem(`comments-${prodID}`);
-    if (savedComments) showComments(JSON.parse(savedComments));
-    
-initProduct();
-showRelatedProducts()
 
+    initProduct();
+    showRelatedProducts()
+
+    const prodID = localStorage.getItem('prodID');
+    const savedComments = localStorage.getItem(`comments-${prodID}`);
+    if (savedComments) showComments(JSON.parse(savedComments))
+        else document.getElementById('commentsList').innerHTML = '<p>No hay comentarios aún. Sé el primero en comentar!</p>';
+    
 
 })
 
