@@ -12,6 +12,7 @@ function initProduct(){
     
 
 function showProduct(producto){
+    const prodID = localStorage.getItem('prodID');
     let cantidad_vendidos 
         if (producto.soldCount == 0) {
           cantidad_vendidos = "Ninguna unidad vendida. Sé el primero en probar este producto!";
@@ -44,7 +45,8 @@ function showProduct(producto){
     <p>${producto.description}</p>
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
-    <p>Añadir al carrito</p>
+    <p>Calificación promedio:${localStorage.getItem(`calification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
+    <button class="btn btn-primary" onclick="location.href='cart.html'">Comprar</button>
     `;
     
 }
@@ -84,7 +86,7 @@ function showRelatedProducts(){
                                 <img src="${producto.image}" class="card-img-top" alt="${producto.name}">
                                 <div class="card-body">
                                     <h5 class="card-title">${producto.name}</h5>
-                                    <button onclick="producto()" class="btn btn-primary">Ver producto</button>
+                                    <button onclick="localStorage.setItem('prodID', ${producto.id}); location.reload();" class="btn btn-primary">Ver producto</button>
                                 </div>
                             </div>
                         `;
@@ -99,8 +101,103 @@ function showRelatedProducts(){
     }
 }
 
-document.addEventListener("DOMContentLoaded", function(e){
+function rate(stars) {
+    selectedRating = stars;
+    const allStars = document.querySelectorAll('#stars .star');
+    allStars.forEach((star, index) => {
+        if (index < stars) {
+            star.classList.add('active');
+        } else {
+            star.classList.remove('active');
+        }
+    });
+}
 
+
+
+function showComments(comments) {
+    const container = document.getElementById('commentsList');
+    let html = '';  
+    comments.forEach(comment => {
+        
+        let stars = '';
+        for (let i = 0; i < 5; i++) {
+            if (i < comment.score) {
+                stars += '<i class="fas fa-star" style="color: #ffd700;"></i>';
+            } else {
+                stars += '<i class="far fa-star" style="color: #ddd;"></i>';
+            }
+        }
+        html += `
+            <div class="comment-card">
+                <div class="d-flex justify-content-between">
+                    <strong>${comment.user}</strong>
+                    <small>${comment.dateTime}</small>
+                </div>
+                <div class="my-2">${stars}</div>
+                <p>${comment.description}</p>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+let selectedRating = 0;  
+let totalRatings = 0;
+
+function addComment() {
+    const prodID = localStorage.getItem('prodID');
+    const text = document.getElementById('commentText').value;
+    const user = localStorage.getItem('username');
+    
+    if (!text || selectedRating === 0) {
+        alert('Completa todos los campos');
+        return;
+    }
+    
+    const newComment = {
+        product: parseInt(localStorage.getItem('prodID')),
+        score: selectedRating,
+        description: text,
+        user: user,
+        dateTime: new Date().toLocaleString('es-UY', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+})
+    };
+    // Cargar comentarios existentes primero
+let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`)) || [];
+
+// Agregar el nuevo comentario al inicio
+comments.unshift(newComment);
+
+// Calcular promedio actualizado
+let promedio = 0;
+if (comments.length > 0) {
+    const suma = comments.reduce((acc, c) => acc + c.score, 0);
+    promedio = (suma / comments.length).toFixed(1); // 1 decimal
+}
+
+// Guardar todo en localStorage
+    localStorage.setItem(`comments-${prodID}`, JSON.stringify(comments));
+    localStorage.setItem(`calification-${prodID}`, promedio);
+    showComments(comments);
+    document.getElementById('commentText').value = '';
+    selectedRating = 0
+    rate(0);
+}
+
+
+document.addEventListener("DOMContentLoaded", function(e){
+const prodID = localStorage.getItem('prodID');
+    const savedComments = localStorage.getItem(`comments-${prodID}`);
+    if (savedComments) showComments(JSON.parse(savedComments));
+    
 initProduct();
 showRelatedProducts()
 
@@ -108,15 +205,5 @@ showRelatedProducts()
 })
 
 
-
-
-
-
-document.addEventListener("DOMContentLoaded", function(e){
-
-initProduct();
-
-
-})
 
 

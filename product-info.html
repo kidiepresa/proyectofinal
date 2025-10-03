@@ -55,6 +55,36 @@
           
         </div>
 
+
+        <div id="calificaciones">
+    <h3>Añade tu comentario:</h3>
+
+    <div class="mb-3">
+        <label>Tu calificación:</label>
+        <div id="stars">
+          <i class="fas fa-star star" onclick="rate(1)"></i>
+          <i class="fas fa-star star" onclick="rate(2)"></i>
+          <i class="fas fa-star star" onclick="rate(3)"></i>
+          <i class="fas fa-star star" onclick="rate(4)"></i>
+          <i class="fas fa-star star" onclick="rate(5)"></i>
+        </div>
+        <small>Selecciona tu calificación</small>
+    </div>
+
+    <div id="form-calificacion">
+        <textarea id="commentText" placeholder="Escribe tu comentario..." rows="3" style="width:100%; margin-top:5px;"></textarea>
+        <button onclick="addComment()">Enviar Comentario</button>
+    </div>
+
+    <div id="lista-calificaciones" style="margin-top:20px;"></div>
+        <div id="commentsList"></div>
+</div>
+
+
+
+
+
+
       </div>
     </div>
     <br><br>

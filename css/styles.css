@@ -226,3 +226,33 @@ a.custom-card:hover {
   max-width: 100px;
  }
  
+.star {
+    font-size: 30px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star.active {
+    color: #ffd700;
+}
+
+.comment-card {
+    border: 1px solid #ddd;       /* borde gris */
+    border-radius: 5px;           /* esquinas redondeadas */
+    padding: 10px;                /* espacio interno */
+    margin-bottom: 10px;          /* separación entre comentarios */
+    background-color: #f9f9f9;    /* color de fondo suave */
+}
+
+.comment-card strong {
+    font-size: 1rem;
+}
+
+.comment-card small {
+    color: #888;
+}
+
+.comment-card p {
+    margin: 5px 0 0 0;
+}
