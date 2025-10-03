@@ -170,7 +170,7 @@ function addComment() {
             second: '2-digit'
 })
     };
-    let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`));
+    let comments = JSON.parse(localStorage.getItem(`comments-${prodID}`)) || [];
     comments.unshift(newComment);
 
 
