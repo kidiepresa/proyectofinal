@@ -45,7 +45,7 @@ function showProduct(producto){
     <p>${producto.description}</p>
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
-    <p>Calificación promedio:${localStorage.getItem(`calification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
+    <p>Calificación promedio:${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
     <button class="btn btn-primary" onclick="location.href='cart.html'">Comprar</button>
     `;
     
@@ -185,7 +185,7 @@ if (comments.length > 0) {
 
 // Guardar todo en localStorage
     localStorage.setItem(`comments-${prodID}`, JSON.stringify(comments));
-    localStorage.setItem(`calification-${prodID}`, promedio);
+    localStorage.setItem(`qualification-${prodID}`, promedio);
     showComments(comments);
     document.getElementById('commentText').value = '';
     selectedRating = 0
