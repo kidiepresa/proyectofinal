@@ -238,11 +238,11 @@ a.custom-card:hover {
 }
 
 .comment-card {
-    border: 1px solid #ddd;       /* borde gris */
-    border-radius: 5px;           /* esquinas redondeadas */
-    padding: 10px;                /* espacio interno */
-    margin-bottom: 10px;          /* separación entre comentarios */
-    background-color: #f9f9f9;    /* color de fondo suave */
+    border: 1px solid #ddd;       
+    border-radius: 5px;         
+    padding: 10px;               
+    margin-bottom: 10px; 
+    background-color: #f9f9f9;    
 }
 
 .comment-card strong {
@@ -255,4 +255,27 @@ a.custom-card:hover {
 
 .comment-card p {
     margin: 5px 0 0 0;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: white;
+}
+
+body.dark-mode .comment-card ,.dark-mode .card,.dark-mode .form-control,.dark-mode .articles, .dark-mode .list-group-item{
+  background-color: #2c2c2c; 
+  color: #f1f1f1;     
+  
+}
+
+.imagen-cuadrada {
+  width: 400px;         /* Tamaño del cuadrado */
+  height: 400px;
+  object-fit: cover;    /* Recorta la imagen sin deformarla */
+  border-radius: 8px;   /* Opcional: esquinas redondeadas */
 }

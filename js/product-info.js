@@ -1,6 +1,8 @@
 let selectedRating = 0; 
 let totalRatings = 0;
+let promedio = 0;
 let commentsAPI = [];
+let suma = 0;
 
 function loadComents() {
     const prodID = localStorage.getItem('prodID');
@@ -23,19 +25,16 @@ function loadComents() {
     }
 }
 
-
 function initProduct(){
     const productID = localStorage.getItem("prodID");
-    const catID = localStorage.getItem("catID");
     fetch(`https://japceibal.github.io/emercado-api/products/${productID}.json`)
     .then(response => response.json())
     .then(data => {
-        localStorage.setItem("relatedProducts", JSON.stringify(data.relatedProducts));
         showProduct(data);
+        showRelatedProducts(data);
         }).catch(error => console.error('Error al cargar el producto', error));
 }
     
-
 function showProduct(producto){
     const prodID = localStorage.getItem('prodID');
     let cantidad_vendidos 
@@ -74,55 +73,8 @@ function showProduct(producto){
     <button class="btn btn-primary" onclick="location.href='cart.html'">Comprar</button>
     <button class="btn btn-primary" onclick="location.href='cart.html'">Añadir al carrito</button>
     `;
-    
+
 }
-
-
-function showRelatedProducts(){
-    const relatedProducts = JSON.parse(localStorage.getItem("relatedProducts"));
-    const relatedContainer = document.getElementById("productos-relacionados");
-    relatedContainer.innerHTML = "";
-    const slides = Math.ceil((relatedProducts.length - 1) / 3);
-    let contador = relatedProducts.length - 1;
-    for (let i = 0; i < slides; i++) {
-        let div = document.createElement("div");
-        div.classList.add("carousel-item");
-        if (i === 0) {
-            div.classList.add("active");
-        }
-        let colDiv = document.createElement("div");
-        colDiv.classList.add("row", "justify-content-center");
-        for (let j = 0; j < 3; j++) {
-            if (contador >= 0) {
-                let producto = relatedProducts[contador];
-                if (producto.id == localStorage.getItem("prodID")) {
-                    producto = relatedProducts[contador - 1];
-                    contador--;
-                }
-                if (contador >= 0) {
-                    if (producto.id != localStorage.getItem("prodID")) {
-                        let cardDiv = document.createElement("div");
-                        cardDiv.classList.add("col-12", "col-md-4", "d-flex", "justify-content-center");
-                        cardDiv.innerHTML = `
-                            <div class="card w-75">
-                                <img src="${producto.image}" class="card-img-top" alt="${producto.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${producto.name}</h5>
-                                    <button onclick="localStorage.setItem('prodID', ${producto.id}); location.reload();" class="btn btn-primary">Ver producto</button>
-                                </div>
-                            </div>
-                        `;
-                        colDiv.appendChild(cardDiv);
-                        div.appendChild(colDiv);
-                        contador--;
-                    }
-                }
-            }
-        }
-        relatedContainer.appendChild(div);
-    }
-} 
-
 
 function rate(stars) {
     selectedRating = stars;
@@ -136,8 +88,8 @@ function rate(stars) {
     });
 }
 
-
 function showComments(comments) {
+    const prodID = localStorage.getItem('prodID');
     const container = document.getElementById('commentsList');
     let html = '';  
     comments.forEach(comment => {
@@ -161,7 +113,9 @@ function showComments(comments) {
             </div>
         `;
     });
-    
+        suma = comments.reduce((acc, c) => acc + c.score, 0);
+        promedio = (suma / comments.length).toFixed(1);
+        localStorage.setItem(`qualification-${prodID}`, promedio);
     container.innerHTML = html;
 }
 
@@ -198,9 +152,9 @@ function addComment() {
     comments.unshift(newComment);
 
 
-    let promedio = 0;
+    
     if (comments.length > 0) {
-        const suma = comments.reduce((acc, c) => acc + c.score, 0);
+        suma = comments.reduce((acc, c) => acc + c.score, 0);
         promedio = (suma / comments.length).toFixed(1);
 }
 
@@ -212,11 +166,32 @@ function addComment() {
     rate(0);
 }
 
+function showRelatedProducts(product) {
+    const container = document.getElementById('relatedProducts');
+    let html = '';
+    product.relatedProducts.forEach((related, index) => {
+        html += `
+            <div class="card m-2" style="width: 18rem; cursor:pointer;" onclick="selectProduct(${related.id})">
+                <img src="${related.image}" class="card-img-top" alt="${related.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${related.name}</h5>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function selectProduct(id) {
+  localStorage.setItem('prodID', id)
+  window.location = 'product-info.html'
+}
+
+
 
 document.addEventListener("DOMContentLoaded", function(e){
 
     initProduct();
-    showRelatedProducts()
     loadComents();
     const prodID = localStorage.getItem('prodID');
     const savedComments = localStorage.getItem(`comments-${prodID}`);
@@ -224,11 +199,12 @@ document.addEventListener("DOMContentLoaded", function(e){
     if (savedComments) {
         showComments(JSON.parse(savedComments));
     }
-    
-   else if (savedQualification == null) {document.getElementById(`commentsList`).innerHTML += `<p>No hay comentarios aún. Sé el primero en comentar!</p>`;}
-    
+    else if (savedQualification == null) {document.getElementById(`commentsList`).innerHTML += `<p>No hay comentarios aún. Sé el primero en comentar!</p>`;}
     
     
+    applyThemePreference()
+    setupThemeSwitch()
+   
 
 })
 

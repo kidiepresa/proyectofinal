@@ -40,6 +40,31 @@ let getJSONData = function(url){
     });
 }
 
+function applyThemePreference() {
+  const darkModeEnabled = localStorage.getItem('darkMode') === 'true'
+  const themeSwitch = document.getElementById('themeSwitch')
+  if (darkModeEnabled) {
+    document.body.classList.add('dark-mode')
+    themeSwitch.checked = true 
+  } else {
+    document.body.classList.remove('dark-mode')
+    themeSwitch.checked = false 
+  }
+}
+
+
+function toggleTheme() {
+  const isDarkMode = document.body.classList.toggle('dark-mode')
+  localStorage.setItem('darkMode', isDarkMode) 
+}
+
+function setupThemeSwitch() {
+  const themeSwitch = document.getElementById('themeSwitch')
+  themeSwitch.addEventListener('change', toggleTheme)
+}
+
+
+
 document.addEventListener("DOMContentLoaded" , function(event){
 if(localStorage.getItem("username")){
         document.getElementById("usuario").textContent = localStorage.getItem("username");
@@ -49,4 +74,8 @@ if (!localStorage.getItem("username")){
       alert("Para visitar nuestra página primero debe iniciar sesión.")
       window.location = "login.html"
     } 
+
+    applyThemePreference();
+    setupThemeSwitch();
+
 })
