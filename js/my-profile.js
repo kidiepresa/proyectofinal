@@ -1,30 +1,34 @@
-
-
 function guardarPerfil() {  
         const perfil = { nombre: document.getElementById('nombre').value, 
             apellido: document.getElementById('apellido').value, 
             email: document.getElementById('email').value, 
             telefono: document.getElementById('telefono').value };  
             localStorage.setItem('userProfile', JSON.stringify(perfil)); 
-            Swal.fire({ icon: 'success', title: '¡Perfil guardado!', text: 'Tus datos se guardaron correctamente', timer: 2000 }); 
+            cargarPerfil();
+            alert('Perfil guardado con éxito.');
+            
         }
 
 function cargarPerfil() {  
     const nombre = localStorage.getItem("username");
-    const datos = document.getElementById("datos");
+    const datos = document.getElementById("ingresar-datos");
     const input = document.getElementById('fileInput');
     const preview = document.getElementById('imagen');
     const savedImage = localStorage.getItem('imagenGuardada');
     const perfilJSON = localStorage.getItem('userProfile');  
 
+    document.getElementById('profileForm').reset();
+
+
+
     if (!perfilJSON) { 
         console.log('No hay perfil guardado'); 
         return; } 
     const perfil = JSON.parse(perfilJSON);  
-    document.getElementById('nombre').value = perfil.nombre; 
-    document.getElementById('apellido').value = perfil.apellido; 
-    document.getElementById('email').value = perfil.email; 
-    document.getElementById('telefono').value = perfil.telefono; 
+    document.getElementById('nombr').textContent = perfil.nombre; 
+    document.getElementById('apellid').textContent = perfil.apellido; 
+    document.getElementById('emai').textContent = perfil.email; 
+    document.getElementById('telefon').textContent = perfil.telefono; 
 
     if (savedImage) {
       preview.src = savedImage;
@@ -60,7 +64,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
 });
 
 
-
+document
 
 document.addEventListener("DOMContentLoaded", function() {
     cargarPerfil();
