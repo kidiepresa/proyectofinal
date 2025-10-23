@@ -3,6 +3,7 @@ let totalRatings = 0;
 let promedio = 0;
 let commentsAPI = [];
 let suma = 0;
+let prod = {};
 
 function loadComents() {
     const prodID = localStorage.getItem('prodID');
@@ -32,6 +33,7 @@ function initProduct(){
     .then(data => {
         showProduct(data);
         showRelatedProducts(data);
+            prod = data;
         }).catch(error => console.error('Error al cargar el producto', error));
 }
     
@@ -70,7 +72,7 @@ function showProduct(producto){
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
     <p>Calificación promedio: ${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
-    <button class="btn btn-primary" onclick="location.href='cart.html'">Comprar</button>
+    <button id="comprar" class="btn btn-primary" onclick="buyProduct()" >Comprar</button>
     <button class="btn btn-primary" onclick="location.href='cart.html'">Añadir al carrito</button>
     `;
 
@@ -187,6 +189,20 @@ function selectProduct(id) {
   window.location = 'product-info.html'
 }
 
+function buyProduct() {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    const yaExiste = carrito.some(item => item.id === prod.id);
+
+    if (!yaExiste) {
+    carrito.push(prod);
+    localStorage.setItem("carrito", JSON.stringify(carrito));   
+    console.log(carrito);
+    }
+
+
+    window.location = 'cart.html';
+}
 
 
 document.addEventListener("DOMContentLoaded", function(e){
@@ -207,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function(e){
    
 
 })
+    
 
-
-
-
+    
