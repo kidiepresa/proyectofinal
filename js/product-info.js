@@ -192,15 +192,17 @@ function selectProduct(id) {
 function buyProduct() {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    const yaExiste = carrito.some(item => item.id === prod.id);
+    
+    const index = carrito.findIndex(item => item.id === prod.id);
 
-    if (!yaExiste) {
-    carrito.push(prod);
-    localStorage.setItem("carrito", JSON.stringify(carrito));   
-    console.log(carrito);
+    if (index === -1) {
+        const productoConCantidad = { ...prod, cantidad: 1 };
+        carrito.push(productoConCantidad);
+    } else {
+        carrito[index].cantidad += 1;
     }
-
-
+    
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     window.location = 'cart.html';
 }
 
