@@ -15,20 +15,38 @@ function cargarPerfil() {
     const input = document.getElementById('fileInput');
     const preview = document.getElementById('imagen');
     const savedImage = localStorage.getItem('imagenGuardada');
-    const perfilJSON = localStorage.getItem('userProfile');  
+    const perfilJSON = localStorage.getItem('userProfile');
 
-    document.getElementById('profileForm').reset();
+    if (!perfilJSON) {
+      console.log('No hay perfil guardado');
+      document.getElementById('editar-perfil').style.display = 'none';
+      document.getElementById('profileForm').style.display = 'block';
+      return;
+    }
+    
 
-
-
-    if (!perfilJSON) { 
-        console.log('No hay perfil guardado'); 
-        return; } 
-    const perfil = JSON.parse(perfilJSON);  
-    document.getElementById('nombr').textContent = perfil.nombre; 
-    document.getElementById('apellid').textContent = perfil.apellido; 
-    document.getElementById('emai').textContent = perfil.email; 
-    document.getElementById('telefon').textContent = perfil.telefono; 
+    document.getElementById('profileForm').style.display = 'none';
+    document.getElementById('editar-perfil').style.display = 'inline-block';
+    document.getElementById('editar-perfil').addEventListener('click', function() {
+      document.getElementById('profileForm').style.display = 'block';
+      document.getElementById('nombr').style.display = 'none';
+      document.getElementById('apellid').style.display = 'none';
+      document.getElementById('emai').style.display = 'none';
+      document.getElementById('telefon').style.display = 'none';
+      
+      const perf = JSON.parse(perfilJSON);
+      document.getElementById('nombre').value = perf.nombre;
+      document.getElementById('apellido').value = perf.apellido;
+      document.getElementById('email').value = perf.email;
+      document.getElementById('telefono').value = perf.telefono;
+      this.style.display = 'none';
+    });
+    
+    const perfil = JSON.parse(perfilJSON);
+    document.getElementById('nombr').textContent = perfil.nombre;
+    document.getElementById('apellid').textContent = perfil.apellido;
+    document.getElementById('emai').textContent = perfil.email;
+    document.getElementById('telefon').textContent = perfil.telefono;
 
     if (savedImage) {
       preview.src = savedImage;
@@ -60,11 +78,13 @@ document.getElementById("logout").addEventListener("click", function() {
 
 document.getElementById("profileForm").addEventListener("submit", function(event) {
     event.preventDefault();
+    document.getElementById('profileForm').style.display = 'none';
+    document.getElementById('nombr').style.display = 'block';
+    document.getElementById('apellid').style.display = 'block';
+    document.getElementById('emai').style.display = 'block';
+    document.getElementById('telefon').style.display = 'block';
     guardarPerfil();
 });
-
-
-document
 
 document.addEventListener("DOMContentLoaded", function() {
     cargarPerfil();

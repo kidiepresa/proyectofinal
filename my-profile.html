@@ -83,18 +83,22 @@
             <h3 id="apellid"></h3>
             <h3 id="emai"></h3>
             <h3 id="telefon"></h3>
+            <br>
+            <button id="editar-perfil">Editar Perfil</button>
+            <br><br>
+            <div id="ingresar-datos">
+              <form id="profileForm"> 
+                <input type="text" id="nombre" style="display: block; margin-bottom: 10px;" placeholder="Nombre" required> 
+                <input type="text" id="apellido" style="display: block; margin-bottom: 10px;" placeholder="Apellido" required> 
+                <input type="email" id="email" style="display: block; margin-bottom: 10px;" placeholder="Email" required> 
+                <input type="tel" id="telefono" style="display: block; margin-bottom: 10px;" placeholder="Teléfono" required> 
+                <button type="submit">Guardar Perfil</button> 
+              </form>
+            </div>
           </div>
           <br><br>
           <div class="col-4"></div>
-          <div class="col-8" id="ingresar-datos">
-              <form id="profileForm"> 
-                <input type="text" id="nombre" placeholder="Nombre" required> 
-                <input type="text" id="apellido" placeholder="Apellido" required> 
-                <input type="email" id="email" placeholder="Email" required> 
-                <input type="tel" id="telefono" placeholder="Teléfono" required> 
-                <button type="submit">Guardar Perfil</button> 
-              </form>
-          </div>
+          
         </div>
       </div>
     </main>
