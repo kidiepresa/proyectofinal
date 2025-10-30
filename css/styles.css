@@ -279,3 +279,7 @@ body.dark-mode .comment-card ,.dark-mode .card,.dark-mode .form-control,.dark-mo
   object-fit: cover;    /* Recorta la imagen sin deformarla */
   border-radius: 8px;   /* Opcional: esquinas redondeadas */
 }
+
+#totales{
+  margin-top: auto;
+}

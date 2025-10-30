@@ -72,8 +72,8 @@ function showProduct(producto){
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
     <p>Calificación promedio: ${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
-    <button id="comprar" class="btn btn-primary" onclick="buyProduct()" >Comprar</button>
-    <button class="btn btn-primary" onclick="location.href='cart.html'">Añadir al carrito</button>
+    <button id="comprar" class="btn btn-primary" onclick="buyProduct(true)" >Comprar</button>
+    <button class="btn btn-primary" onclick="buyProduct(false)">Añadir al carrito</button>
     `;
 
 }
@@ -189,7 +189,7 @@ function selectProduct(id) {
   window.location = 'product-info.html'
 }
 
-function buyProduct() {
+function buyProduct(redirigir) {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     
@@ -203,7 +203,7 @@ function buyProduct() {
     }
     
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    window.location = 'cart.html';
+    if (redirigir) window.location = 'cart.html';
 }
 
 

@@ -1,10 +1,13 @@
 function initCart() {
 
-    const carrito = localStorage.getItem("carrito");
 
-        if (carrito) {
-            for (let product of JSON.parse(carrito)) {
-                document.getElementById("row").innerHTML += `
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    const row = document.getElementById("row");
+    
+
+        if (carrito.length > 0) {
+            for (let product of carrito){
+                row.innerHTML += `
                 <div class="card" style="max-width: 1400px;">
                     <div class="row g-0">
                         <div class="col-md-4">
@@ -28,7 +31,20 @@ function initCart() {
                 <br><br>
                 `;
             };
+        }else{
+            document.getElementById("row").innerHTML = `
+                    <div id="carrito-vacio" style="text-align: center; padding: 50px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Carrito vacío"  style="width: 100px; opacity: 0.5; margin-bottom: 20px;">
+                        <h2>Tu carrito está vacío</h2>
+                        <p>Parece que todavía no agregaste productos.</p>
+                        <a href="index.html" class="btn btn-primary" style="margin-top: 20px;"> Ir a comprar </a>
+                    </div>
+                    `;
+
+            document.getElementById("totales").innerHTML = "";
         }
+
+
         document.querySelectorAll(".cantidad-input").forEach(input => {
         input.addEventListener("change", cambiarCantidad);
         });
@@ -51,9 +67,22 @@ function cambiarCantidad(e) {
     actualizarTotal();
 }
 
+let dolar_venta;
+
+
+function dolar(){
+    fetch("https://uy.dolarapi.com/v1/cotizaciones/usd")
+    .then(res => res.json())
+    .then(data => {
+        dolar_venta = data.venta;
+        actualizarTotal();
+    })
+  .catch(err => console.error(err));
+}
+
 function actualizarTotal() {
     const carrito = JSON.parse(localStorage.getItem("carrito"));
-    const dolar = 40;
+    const dolar = dolar_venta;
     let totalUYU = carrito.reduce((sum, p) => {
             if (p.currency === "UYU") return sum + p.cost * p.cantidad;
                  else return sum + p.cost * p.cantidad * dolar; 
@@ -64,17 +93,18 @@ function actualizarTotal() {
                 else return sum + (p.cost * p.cantidad) / dolar; 
                 }, 0);
 
-    document.getElementById("total-pesos").innerText = `Total en pesos:  ${totalUYU} UYU`;
-    document.getElementById("total-dolares").innerText = `Total en dolares:  ${totalUSD} USD`;
+    document.getElementById("total-pesos").innerText = `Total en pesos:  ${totalUYU.toFixed(2)} UYU`;
+    document.getElementById("total-dolares").innerText = `Total en dolares:  ${totalUSD.toFixed(2)} USD`;
 }
 
 function removeFromCart(id) {
     let carrito = JSON.parse(localStorage.getItem("carrito"));
     carrito = carrito.filter(p => p.id !== id);
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    location.reload();}
+    location.reload();
+}
 
 document.addEventListener("DOMContentLoaded", function(e){
+    dolar();
     initCart();
-    actualizarTotal();
 });
