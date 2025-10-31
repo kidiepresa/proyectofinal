@@ -79,6 +79,8 @@ function showProducts(array, catName){
         auto.style.padding= "10px";
         auto.style.display = "flex";
         auto.style.gap = "20px";
+        auto.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        auto.style.color = "black";
         auto.onclick = function(){
           
           localStorage.setItem("prodID", producto.id);
@@ -128,7 +130,16 @@ const url = `https://japceibal.github.io/emercado-api/cats_products/${catID}.jso
   }).catch(error => console.error('Error al cargar los productos:', error));
 }
 
+function cambiarFondo(catID) {
+    const urlFondo = `fondos/${catID}.jpg`;
+    
+    document.body.style.backgroundImage = `url('${urlFondo}')`;
+    document.body.style.backgroundSize = "cover";       
+    document.body.style.backgroundRepeat = "no-repeat"; 
+    document.body.style.backgroundPosition = "center";  
+    document.body.style.backgroundAttachment = "fixed";
 
+}
 
 document.addEventListener("DOMContentLoaded", function(e){
 
@@ -152,4 +163,5 @@ initProducts();
 
     document.getElementById("searchinput").addEventListener("input", filterProducts);
 
+    cambiarFondo(Number(localStorage.getItem("catID")));
   });

@@ -195,7 +195,7 @@ a.custom-card:hover {
 }
 
 .vendidos{
-  color: #80888f;
+  color: #24282c;
 }
 
 #e{
@@ -273,11 +273,13 @@ body.dark-mode .comment-card ,.dark-mode .card,.dark-mode .form-control,.dark-mo
   
 }
 
+
+
 .imagen-cuadrada {
-  width: 400px;         /* Tamaño del cuadrado */
+  width: 400px;       
   height: 400px;
-  object-fit: cover;    /* Recorta la imagen sin deformarla */
-  border-radius: 8px;   /* Opcional: esquinas redondeadas */
+  object-fit: cover;    
+  border-radius: 8px;  
 }
 
 #totales{
