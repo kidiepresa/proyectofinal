@@ -71,7 +71,8 @@ function showProducts(array, catName){
     `
 
     titulo.prepend(titulo_div);
-
+    titulo_div.style.color = "black";
+    
     array.forEach(producto => {
         let auto = document.createElement("div")
         auto.classList.add("row", "list-group-item", "list-group-item-action", "articles", "cursor-active")
@@ -108,7 +109,11 @@ function showProducts(array, catName){
                 <i class="vendidos">${cantidad_vendidos}</i>
           </div>`
         productos.appendChild(auto);        
-    });
+    })
+    
+    if(array.length === 0){
+        productos.innerHTML = `<h3 class="text-center mt-4">No se encontraron productos que coincidan con los criterios de búsqueda.</h3>`;
+    }
     
 }
 
@@ -138,7 +143,6 @@ function cambiarFondo(catID) {
     document.body.style.backgroundRepeat = "no-repeat"; 
     document.body.style.backgroundPosition = "center";  
     document.body.style.backgroundAttachment = "fixed";
-
 }
 
 document.addEventListener("DOMContentLoaded", function(e){

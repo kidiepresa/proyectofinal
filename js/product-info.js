@@ -14,7 +14,6 @@ function loadComents() {
     if (savedComments) {
         showComments(savedComments);
     } else {
-        // Si no hay, cargar los de la API y guardarlos
         fetch(`https://japceibal.github.io/emercado-api/products_comments/${prodID}.json`)
             .then(response => response.json())
             .then(data => {
@@ -105,7 +104,7 @@ function showComments(comments) {
             }
         }
         html += `
-            <div class="comment-card">
+            <div  class="comment-card comentarios">
                 <div class="d-flex justify-content-between">
                     <strong>${comment.user}</strong>
                     <small>${comment.dateTime}</small>
@@ -118,12 +117,13 @@ function showComments(comments) {
         suma = comments.reduce((acc, c) => acc + c.score, 0);
         promedio = (suma / comments.length).toFixed(1);
         localStorage.setItem(`qualification-${prodID}`, promedio);
-    container.innerHTML = html;
+        container.innerHTML = html;
+   
 }
 
 function formatDate(date) {
     const d = date.getDate().toString().padStart(2, '0');
-    const m = (date.getMonth() + 1).toString().padStart(2, '0'); // Enero = 0
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
     const y = date.getFullYear();
 
     const h = date.getHours().toString().padStart(2, '0');
@@ -206,9 +206,19 @@ function buyProduct(redirigir) {
     if (redirigir) window.location = 'cart.html';
 }
 
+function cambiarFondo() {
+    const catID = localStorage.getItem("catID");
+    const urlFondo = `fondos/${catID}.jpg`;
+    
+    document.body.style.backgroundImage = `url('${urlFondo}')`;
+    document.body.style.backgroundSize = "cover";       
+    document.body.style.backgroundRepeat = "no-repeat"; 
+    document.body.style.backgroundPosition = "center";  
+    document.body.style.backgroundAttachment = "fixed";
+}
 
 document.addEventListener("DOMContentLoaded", function(e){
-
+    cambiarFondo();
     initProduct();
     loadComents();
     const prodID = localStorage.getItem('prodID');
