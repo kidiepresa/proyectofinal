@@ -5,7 +5,12 @@ function guardarPerfil() {
             telefono: document.getElementById('telefono').value };  
             localStorage.setItem('userProfile', JSON.stringify(perfil)); 
             cargarPerfil();
-            alert('Perfil guardado con éxito.');
+            Swal.fire({
+            icon: 'success',
+            title: 'Perfil Actualizado',
+            text: 'Su perfil ha sido actualizado con éxito.',
+            confirmButtonText: 'Aceptar',
+            });
             
         }
 
@@ -70,11 +75,6 @@ function cargarPerfil() {
 } 
 
 
-document.getElementById("logout").addEventListener("click", function() {
-    localStorage.removeItem("username");
-    alert("Su sesión ha sido cerrada con éxito.")
-    window.location.href = "login.html";
-    });
 
 document.getElementById("profileForm").addEventListener("submit", function(event) {
     event.preventDefault();

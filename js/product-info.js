@@ -7,8 +7,6 @@ let prod = {};
 
 function loadComents() {
     const prodID = localStorage.getItem('prodID');
-
-
     let savedComments = JSON.parse(localStorage.getItem(`comments-${prodID}`));
 
     if (savedComments) {
@@ -46,6 +44,8 @@ function showProduct(producto){
         }else cantidad_vendidos = `Se han vendido ${producto.soldCount} unidades.`;
 
 
+     const comentarios = JSON.parse(localStorage.getItem(`comments-${prodID}`)) || [];
+
      let imagenPrincipal = `
     <div id="galeria">
       <img id="main-image" src="${producto.images[0]}" 
@@ -63,18 +63,179 @@ function showProduct(producto){
       </div>
     </div>
   `;
-
-  document.getElementById("imagen-producto").innerHTML = imagenPrincipal;
+          let promedio = localStorage.getItem(`qualification-${prodID}`) || 'Este producto aún no ha sido calificado';
+    document.getElementById("imagen-producto").innerHTML = imagenPrincipal;
     document.getElementById("info-producto").innerHTML = `
     <h1>${producto.name}</h1>
     <p>${producto.description}</p>
     <p> ${producto.currency} ${producto.cost}</p>
     <p> ${cantidad_vendidos}</p>
-    <p>Calificación promedio: ${localStorage.getItem(`qualification-${prodID}`) || ' Este producto aún no ha sido calificado'} </p>
-    <button id="comprar" class="btn btn-primary" onclick="buyProduct(true)" >Comprar</button>
-    <button class="btn btn-primary" onclick="buyProduct(false)">Añadir al carrito</button>
+    <p id="promedio">Calificación promedio: ${promedio}</p>
+    <br><br>
+    <button class="comprar-btn" onclick="buyProduct(true)">Comprar</button>
+    <button onclick="buyProduct(false)" class="add-to-cart">
+            <span>Agregar al carrito</span>
+            <svg class="morph" viewBox="0 0 64 13">
+                <path d="M0 12C6 12 17 12 32 12C47.9024 12 58 12 64 12V13H0V12Z" />
+            </svg>
+            <div class="shirt">
+                <img src="${producto.images[0]}" style="width:70px;  border-radius:20px;">
+            </div>
+            <div class="cart">
+                <svg viewBox="0 0 36 26">
+                    <path d="M1 2.5H6L10 18.5H25.5L28.5 7.5L7.5 7.5" class="shape" />
+                    <path
+                        d="M11.5 25C12.6046 25 13.5 24.1046 13.5 23C13.5 21.8954 12.6046 21 11.5 21C10.3954 21 9.5 21.8954 9.5 23C9.5 24.1046 10.3954 25 11.5 25Z"
+                        class="wheel" />
+                    <path
+                        d="M24 25C25.1046 25 26 24.1046 26 23C26 21.8954 25.1046 21 24 21C22.8954 21 22 21.8954 22 23C22 24.1046 22.8954 25 24 25Z"
+                        class="wheel" />
+                    <path d="M14.5 13.5L16.5 15.5L21.5 10.5" class="tick" />
+                </svg>
+            </div>
+        </button>
     `;
 
+    gsap.registerPlugin(MorphSVGPlugin)
+
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+            let morph = button.querySelector('.morph path'),
+                shirt = button.querySelectorAll('.shirt svg > path')
+            button.addEventListener('pointerdown', e => {
+                if (button.classList.contains('active')) {
+                    return
+                }
+                gsap.to(button, {
+                    '--background-scale': .97,
+                    duration: .15
+                })
+            })
+            button.addEventListener('click', e => {
+                e.preventDefault()
+                if (button.classList.contains('active')) {
+                    return
+                }
+                button.classList.add('active')
+                gsap.to(button, {
+                    keyframes: [{
+                        '--background-scale': .97,
+                        duration: .15
+                    }, {
+                        '--background-scale': 1,
+                        delay: .125,
+                        duration: 1.2,
+                        ease: 'elastic.out(1, .6)'
+                    }]
+                })
+                gsap.to(button, {
+                    keyframes: [{
+                        '--shirt-scale': 1,
+                        '--shirt-y': '-42px',
+                        '--cart-x': '0px',
+                        '--cart-scale': 1,
+                        duration: .4,
+                        ease: 'power1.in'
+                    }, {
+                        '--shirt-y': '-40px',
+                        duration: .3
+                    }, {
+                        '--shirt-y': '16px',
+                        '--shirt-scale': 0.5,
+                        duration: .25,
+                        ease: 'none'
+                    }, {
+                        '--shirt-scale': 0,
+                        duration: .3,
+                        ease: 'none'
+                    }]
+                })
+                gsap.to(button, {
+                    '--shirt-second-y': '0px',
+                    delay: .835,
+                    duration: .12
+                })
+                gsap.to(button, {
+                    keyframes: [{
+                        '--cart-clip': '12px',
+                        '--cart-clip-x': '3px',
+                        delay: .9,
+                        duration: .06
+                    }, {
+                        '--cart-y': '2px',
+                        duration: .1
+                    }, {
+                        '--cart-tick-offset': '0px',
+                        '--cart-y': '0px',
+                        duration: .2,
+                        onComplete() {
+                            button.style.overflow = 'hidden'
+                        }
+                    }, {
+                        '--cart-x': '52px',
+                        '--cart-rotate': '-15deg',
+                        duration: .2
+                    }, {
+                        '--cart-x': '104px',
+                        '--cart-rotate': '0deg',
+                        duration: .2,
+                        clearProps: true,
+                        onComplete() {
+                            button.style.overflow = 'hidden'
+                            button.style.setProperty('--text-o', 0)
+                            button.style.setProperty('--text-x', '0px')
+                            button.style.setProperty('--cart-x', '-104px')
+                        }
+                    }, {
+                        '--text-o': 1,
+                        '--text-x': '12px',
+                        '--cart-x': '-75px',        
+                        '--cart-y': '0px',       
+                        '--cart-rotate': '0deg', 
+                        '--cart-scale': .75,
+                        duration: .25,
+                        clearProps: true,
+                        onComplete() {
+                            button.classList.remove('active')
+                            
+                        }
+                    }]
+                })
+                gsap.to(button, {
+                    keyframes: [{
+                        '--text-o': 0,
+                        duration: .3
+                    }]
+                })
+                gsap.to(morph, {
+                    keyframes: [{
+                        morphSVG: 'M0 12C6 12 20 10 32 0C43.9024 9.99999 58 12 64 12V13H0V12Z',
+                        duration: .25,
+                        ease: 'power1.out'
+                    }, {
+                        morphSVG: 'M0 12C6 12 17 12 32 12C47.9024 12 58 12 64 12V13H0V12Z',
+                        duration: .15,
+                        ease: 'none'
+                    }]
+                })
+                gsap.to(shirt, {
+                    keyframes: [{
+                        morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L23.5 8L20.5 11L19 9.5L18 22.5C18 22.5 14 21.5 12 21.5C10 21.5 5.99997 22.5 5.99997 22.5L4.99997 9.5L3.5 11L0.5 8L4.99997 3Z',
+                        duration: .25,
+                        delay: .25
+                    }, {
+                        morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L23.5 8L20.5 11L19 9.5L18.5 22.5C18.5 22.5 13.5 22.5 12 22.5C10.5 22.5 5.5 22.5 5.5 22.5L4.99997 9.5L3.5 11L0.5 8L4.99997 3Z',
+                        duration: .85,
+                        ease: 'elastic.out(1, .5)'
+                    }, {
+                        morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L22.5 8L19.5 10.5L19 9.5L17.1781 18.6093C17.062 19.1901 16.778 19.7249 16.3351 20.1181C15.4265 20.925 13.7133 22.3147 12 23C10.2868 22.3147 8.57355 20.925 7.66487 20.1181C7.22198 19.7249 6.93798 19.1901 6.82183 18.6093L4.99997 9.5L4.5 10.5L1.5 8L4.99997 3Z',
+                        duration: 0,
+                        delay: 1.25
+                    }]
+                })
+            })
+    })
+
+    
 }
 
 function rate(stars) {
@@ -115,9 +276,15 @@ function showComments(comments) {
         `;
     });
         suma = comments.reduce((acc, c) => acc + c.score, 0);
-        promedio = (suma / comments.length).toFixed(1);
+        if (comments.length > 0) {
+    suma = comments.reduce((acc, c) => acc + c.score, 0);
+    promedio = (suma / comments.length).toFixed(1);
+} else {
+    promedio = 'Este producto aún no ha sido calificado';
+}
         localStorage.setItem(`qualification-${prodID}`, promedio);
         container.innerHTML = html;
+        document.getElementById("promedio").innerText = `Calificación promedio: ${promedio}`;
    
 }
 
@@ -217,6 +384,8 @@ function cambiarFondo() {
     document.body.style.backgroundAttachment = "fixed";
 }
 
+
+
 document.addEventListener("DOMContentLoaded", function(e){
     cambiarFondo();
     initProduct();
@@ -235,6 +404,4 @@ document.addEventListener("DOMContentLoaded", function(e){
    
 
 })
-    
-
     
