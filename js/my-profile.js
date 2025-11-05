@@ -78,12 +78,37 @@ function cargarPerfil() {
 
 document.getElementById("profileForm").addEventListener("submit", function(event) {
     event.preventDefault();
-    document.getElementById('profileForm').style.display = 'none';
-    document.getElementById('nombr').style.display = 'block';
-    document.getElementById('apellid').style.display = 'block';
-    document.getElementById('emai').style.display = 'block';
-    document.getElementById('telefon').style.display = 'block';
-    guardarPerfil();
+
+    Swal.fire({
+        title: '¿Desea guardar los cambios?',
+        text: "Si no guarda, los cambios se perderán.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Descartar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            guardarPerfil();
+            Swal.fire({
+                icon: 'success',
+                title: 'Perfil Actualizado',
+                text: 'Su perfil ha sido actualizado con éxito.',
+                confirmButtonText: 'Aceptar',
+            });
+        } 
+
+        if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire('Cambios descartados', '', 'info');
+        }
+
+        document.getElementById('profileForm').style.display = 'none';
+        document.getElementById('nombr').style.display = 'block';
+        document.getElementById('apellid').style.display = 'block';
+        document.getElementById('emai').style.display = 'block';
+        document.getElementById('telefon').style.display = 'block';
+        document.getElementById('editar-perfil').style.display = 'inline-block';
+    });
 });
 
 document.addEventListener("DOMContentLoaded", function() {

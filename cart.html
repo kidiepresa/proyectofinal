@@ -50,17 +50,89 @@
   </nav>
   <main>
     <br><br><br>
-    <div class="container">
-      <div class="row">
-        <div id="row" class="col-12">
-          
+    <div class="container my-4">
+       <div class="row justify-content-center">
+        <div id="row" class="col-12 mb-4 "></div>
+          <div id="totales" class="col-10 p-4 border rounded shadow-sm bg-light">
+            <h4 class="mb-3">Resumen de compra</h4>
+            <div class="mb-3">
+              <label for="tipoEnvio" class="form-label fw-bold">Tipo de envío:</label>
+              <select id="tipoEnvio" class="form-select" onchange="costoEnvio()">
+                <option value="0">Selecciona un tipo de envío</option>
+                <option value="0.05">Standard 12 a 15 días (5%)</option>
+                <option value="0.07">Express 5 a 8 días (7%)</option>
+                <option value="0.15">Premium 2 a 5 días (15%)</option>
+              </select>
+            </div>
+
+            <div class="mb-3 mt-4 p-3 border rounded bg-white">
+        <h5 class="fw-bold mb-2">Dirección de envío</h5>
+        <div class="mb-2">
+          <label for="calle" class="form-label">Calle:</label>
+          <input type="text" id="calle" class="form-control" placeholder="Ej: Av. Principal 123">
         </div>
-        <div id="totales">
-            <h2 id="total-pesos"></h2>
-            <h2 id="total-dolares"></h2>
-          </div>
+        <div class="mb-2">
+          <label for="ciudad" class="form-label">Ciudad:</label>
+          <input type="text" id="ciudad" class="form-control" placeholder="Ej: Montevideo">
+        </div>
+        <div class="mb-2">
+          <label for="codigoPostal" class="form-label">Código postal:</label>
+          <input type="text" id="codigoPostal" class="form-control" placeholder="Ej: 11300">
+        </div>
+        <div class="mb-2">
+          <label for="pais" class="form-label">País:</label>
+          <input type="text" id="pais" class="form-control" placeholder="Ej: Uruguay">
+        </div>
+      </div>
+      <button class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modalPago">
+    Seleccionar forma de pago
+</button>
+
+<!-- Modal de forma de pago -->
+<div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPagoLabel">Seleccionar forma de pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="formaPago" id="tarjetaCredito" value="Tarjeta de crédito">
+          <label class="form-check-label" for="tarjetaCredito">
+            Tarjeta de crédito
+          </label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="formaPago" id="transferencia" value="Transferencia bancaria">
+          <label class="form-check-label" for="transferencia">
+            Transferencia bancaria
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="guardarFormaPago()">Seleccionar</button>
       </div>
     </div>
+  </div>
+</div>
+
+
+<p id="metodo-pago" class="fs-6 text-center mt-2 text-secondary">Método de pago: No seleccionado</p>
+      
+
+      <p id="subtotal" class="fs-6 text-secondary mb-1">Subtotal: ---</p>
+      <p id="costo-envio" class="fs-6 text-secondary mb-1">Costo de envío: ---</p>
+      <p id="total-pesos" class="fs-5 fw-bold">Total: ---</p>
+
+      <button class="btn btn-primary w-100 mt-3">Finalizar compra</button>
+    </div>
+  </div>
+</div>
+
+
+
   </main>
   <footer class="text-muted">
     <div class="container">

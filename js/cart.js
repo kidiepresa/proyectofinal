@@ -1,3 +1,7 @@
+let dolar_venta;
+let totalUYU;
+let totalUSD
+
 function initCart() {
 
 
@@ -5,33 +9,50 @@ function initCart() {
     const row = document.getElementById("row");
     
 
-        if (carrito.length > 0) {
-            for (let product of carrito){
-                row.innerHTML += `
-                <div class="card" style="max-width: 1400px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="${product.images[0]}" class="img-fluid rounded-start" alt="${product.description}">
+      if (carrito.length > 0) {
+    row.innerHTML = ''; // limpiar antes
+    for (let product of carrito) {
+        row.innerHTML += `
+        <div class="card mb-4 shadow rounded" style="max-width: 100%;">
+            <div class="row g-0 align-items-center">
+                
+                <!-- Imagen del producto -->
+                <div class="col-md-4 text-center">
+                    <img src="${product.images[0]}" class="img-fluid rounded p-3" alt="${product.description}" style="max-height: 250px; object-fit: contain;">
+                </div>
+
+                <!-- Información del producto -->
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text text-secondary">${product.currency} ${product.cost.toLocaleString()}</p>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <label for="${product.id}" class="me-2 mb-0 fw-semibold">Cantidad:</label>
+                            <input type="number" min="1" value="${product.cantidad}" id="${product.id}" class="form-control cantidad-input" style="width:80px;">
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">${product.name}</h5>
-                                <p class="card-text">${product.currency} ${product.cost}</p>
-                                <div class="col-6">
-                                    <label for="cantidad">Cantidad:</label>
-                                    <input type="number" min="1" value="${product.cantidad}" id="${product.id}" class="cantidad-input">
-                                    <br><br><br>
-                                    <button class="btn btn-danger mb-3" onclick="removeFromCart(${product.id})">Eliminar del carrito</button>
-                                </div>
-                            </div>
-                        </div>
-                        <p>Subtotal: ${product.currency} <span class="subtotal" id="${product.id}">${product.cost * product.cantidad}</span></p>
+
+                        <p class="mb-2">
+                            Subtotal: 
+                            <span class="fw-bold text-primary">
+                                ${product.currency} <span class="subtotal" id="${product.id}">${(product.cost * product.cantidad).toLocaleString()}</span>
+                            </span>
+                        </p>
+
+                        <button class="btn btn-danger btn-sm" style="background-color:#ff6b6b; border:none;" 
+                            onmouseover="this.style.backgroundColor='#ff4c4c'" 
+                            onmouseout="this.style.backgroundColor='#ff6b6b'" 
+                            onclick="removeFromCart(${product.id})">
+                            Eliminar
+                        </button>
                     </div>
                 </div>
-                <br><br>
-                `;
-            };
-        }else{
+
+            </div>
+        </div>
+        `;
+    }
+}else{
             document.getElementById("row").innerHTML = `
                     <div id="carrito-vacio" style="text-align: center; padding: 50px;">
                         <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Carrito vacío"  style="width: 100px; opacity: 0.5; margin-bottom: 20px;">
@@ -42,6 +63,7 @@ function initCart() {
                     `;
 
             document.getElementById("totales").innerHTML = "";
+            document.getElementById("totales").style.display = "none";
         }
 
 
@@ -67,9 +89,6 @@ function cambiarCantidad(e) {
     actualizarTotal();
 }
 
-let dolar_venta;
-
-
 function dolar(){
     fetch("https://uy.dolarapi.com/v1/cotizaciones/usd")
     .then(res => res.json())
@@ -83,18 +102,14 @@ function dolar(){
 function actualizarTotal() {
     const carrito = JSON.parse(localStorage.getItem("carrito"));
     const dolar = dolar_venta;
-    let totalUYU = carrito.reduce((sum, p) => {
+    totalUYU = carrito.reduce((sum, p) => {
             if (p.currency === "UYU") return sum + p.cost * p.cantidad;
                  else return sum + p.cost * p.cantidad * dolar; 
                 }, 0);
 
-    let totalUSD = carrito.reduce((sum, p) => {
-            if (p.currency === "USD") return sum + p.cost * p.cantidad;
-                else return sum + (p.cost * p.cantidad) / dolar; 
-                }, 0);
-
-    document.getElementById("total-pesos").innerText = `Total en pesos:  ${totalUYU.toFixed(2)} UYU`;
-    document.getElementById("total-dolares").innerText = `Total en dolares:  ${totalUSD.toFixed(2)} USD`;
+                
+    document.getElementById("total-pesos").innerText = `Total en pesos:  ${totalUYU.toFixed(2)} UYU`
+    costoEnvio();
 }
 
 function removeFromCart(id) {
@@ -104,7 +119,41 @@ function removeFromCart(id) {
     location.reload();
 }
 
+function costoEnvio() {
+  const porcentajeEnvio = parseFloat(document.getElementById("tipoEnvio").value);
+
+  const costo = totalUYU * porcentajeEnvio; 
+  const totalConEnvio = totalUYU + costo;
+  document.getElementById("subtotal").innerText = `Productos: ${totalUYU.toFixed(2)} UYU`;
+  document.getElementById("costo-envio").innerText = `Costo de envío: ${costo.toFixed(2)} UYU`;
+  document.getElementById("total-pesos").innerText = `Total final: ${totalConEnvio.toFixed(2)} UYU`;
+}
+
+function guardarFormaPago() {
+    const formaPago = document.querySelector('input[name="formaPago"]:checked');
+    if (!formaPago) {
+        Swal.fire('Error', 'Por favor, selecciona una forma de pago', 'error');
+        return;
+    }
+
+    localStorage.setItem('formaPago', formaPago.value);
+    Swal.fire('¡Listo!', `Forma de pago seleccionada: ${formaPago.value}`, 'success');
+
+    // Cierra el modal automáticamente
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalPago'));
+    modal.hide();
+
+    // Mostrar en la tarjeta
+    document.getElementById('metodo-pago').innerText = `Método de pago: ${formaPago.value}`;
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function(e){
     dolar();
     initCart();
+    const formaPagoGuardada = localStorage.getItem('formaPago');
+    if (formaPagoGuardada) {
+        document.getElementById('metodo-pago').innerText = `Método de pago: ${formaPagoGuardada}`;
+    }
 });
