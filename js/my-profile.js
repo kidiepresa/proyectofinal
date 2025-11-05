@@ -11,7 +11,6 @@ function guardarPerfil() {
             text: 'Su perfil ha sido actualizado con éxito.',
             confirmButtonText: 'Aceptar',
             });
-            
         }
 
 function cargarPerfil() {  
@@ -107,7 +106,8 @@ document.getElementById("profileForm").addEventListener("submit", function(event
         document.getElementById('apellid').style.display = 'block';
         document.getElementById('emai').style.display = 'block';
         document.getElementById('telefon').style.display = 'block';
-        document.getElementById('editar-perfil').style.display = 'inline-block';
+        document.getElementById('editar-perfil').style.display = 'inline-block'
+        ;
     });
 });
 

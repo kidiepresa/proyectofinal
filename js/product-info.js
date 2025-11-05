@@ -63,7 +63,7 @@ function showProduct(producto){
       </div>
     </div>
   `;
-          let promedio = localStorage.getItem(`qualification-${prodID}`) || 'Este producto aún no ha sido calificado';
+    let promedio = localStorage.getItem(`qualification-${prodID}`) || 'Este producto aún no ha sido calificado';
     document.getElementById("imagen-producto").innerHTML = imagenPrincipal;
     document.getElementById("info-producto").innerHTML = `
     <h1>${producto.name}</h1>
@@ -306,7 +306,12 @@ function addComment() {
     const user = localStorage.getItem('username');
     
     if (!text || selectedRating === 0) {
-        alert('Completa todos los campos');
+        Swal.fire({
+        icon: 'warning',
+        title: 'Atención',
+        text: 'Completa todos los campos',
+        confirmButtonText: 'Aceptar'
+});
         return;
     }
     

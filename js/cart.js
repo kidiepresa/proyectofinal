@@ -10,13 +10,12 @@ function initCart() {
     
 
       if (carrito.length > 0) {
-    row.innerHTML = ''; // limpiar antes
+    row.innerHTML = ''; 
     for (let product of carrito) {
         row.innerHTML += `
         <div class="card mb-4 shadow rounded" style="max-width: 100%;">
             <div class="row g-0 align-items-center">
                 
-                <!-- Imagen del producto -->
                 <div class="col-md-4 text-center">
                     <img src="${product.images[0]}" class="img-fluid rounded p-3" alt="${product.description}" style="max-height: 250px; object-fit: contain;">
                 </div>
@@ -139,14 +138,51 @@ function guardarFormaPago() {
     localStorage.setItem('formaPago', formaPago.value);
     Swal.fire('¡Listo!', `Forma de pago seleccionada: ${formaPago.value}`, 'success');
 
-    // Cierra el modal automáticamente
     const modal = bootstrap.Modal.getInstance(document.getElementById('modalPago'));
     modal.hide();
 
-    // Mostrar en la tarjeta
     document.getElementById('metodo-pago').innerText = `Método de pago: ${formaPago.value}`;
 }
 
+function validarCompra() {
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+
+    const tipoEnvio = parseFloat(document.getElementById('tipoEnvio').value);
+    if (!tipoEnvio || tipoEnvio === 0) {
+        Swal.fire('Error', 'Selecciona un tipo de envío antes de finalizar la compra.', 'error');
+        return;
+    }
+
+    const departamento = document.getElementById('departamento').value.trim();
+    const localidad = document.getElementById('localidad').value.trim();
+    const calle = document.getElementById('calle').value.trim();
+    const numero = document.getElementById('numero').value.trim();
+    const esquina = document.getElementById('esquina').value.trim();
+
+    if (!departamento || !localidad || !calle || !numero || !esquina) {
+        Swal.fire('Error', 'Completa todos los campos de la dirección de envío.', 'error');
+        return;
+    }
+    
+    const formaPago = localStorage.getItem('formaPago');
+    if (!formaPago) {
+        Swal.fire('Error', 'Debes seleccionar una forma de pago antes de finalizar la compra.', 'error');
+        return;
+    }
+    Swal.fire({
+        icon: 'success',
+        title: '¡Compra realizada!',
+        html: `
+            Gracias por tu compra.<br>
+            Método de pago: <b>${formaPago}</b><br>
+            Envío a: ${calle} ${numero}, esquina ${esquina}, ${localidad}, ${departamento}.
+        `
+    }).then(() => {
+        localStorage.removeItem("carrito");
+        localStorage.removeItem('formaPago');
+        location.reload();
+    });
+}
 
 
 document.addEventListener("DOMContentLoaded", function(e){
