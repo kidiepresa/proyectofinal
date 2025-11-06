@@ -376,6 +376,7 @@ function buyProduct(redirigir) {
     
     localStorage.setItem("carrito", JSON.stringify(carrito));
     if (redirigir) window.location = 'cart.html';
+    actualizarCantidadCarrito();
 }
 
 function cambiarFondo() {

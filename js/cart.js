@@ -109,6 +109,7 @@ function actualizarTotal() {
                 
     document.getElementById("total-pesos").innerText = `Total en pesos:  ${totalUYU.toFixed(2)} UYU`
     costoEnvio();
+    actualizarCantidadCarrito();
 }
 
 function removeFromCart(id) {

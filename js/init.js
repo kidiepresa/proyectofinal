@@ -106,3 +106,17 @@ function logOut() {
         window.location.href = "login.html";
     });
 }
+
+function actualizarCantidadCarrito() {
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let cantidadCarrito = 0;
+    carrito.forEach(item => {
+        cantidadCarrito += item.cantidad;
+    });
+    const carritoCantidadElemento = document.getElementById("carritoCantidad");
+    carritoCantidadElemento.textContent = cantidadCarrito;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    actualizarCantidadCarrito();
+});
